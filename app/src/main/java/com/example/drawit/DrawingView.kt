@@ -22,10 +22,31 @@ class DrawingView(context: Context, attrs: AttributeSet) : View(context,attrs){
     private var canvas: Canvas? = null
     private var mPaths = ArrayList<CustomPath>()
 
+    private var mUndoPaths = ArrayList<CustomPath>()
+
     init {
         setUpDrawing()
     }
 
+    fun onClickUndo(){
+        if(mPaths.size>0){
+            mUndoPaths.add(mPaths.removeAt(mPaths.size-1))
+            invalidate()
+        }
+    }
+    fun onClickRedo(){
+        if(mUndoPaths.size>0){
+            mPaths.add(mUndoPaths.removeAt(mUndoPaths.size-1))
+            invalidate()
+        }
+    }
+    fun newFile(){
+        if (mPaths.size!=0){
+            mPaths.removeAll(mPaths)
+            mUndoPaths.removeAll(mUndoPaths)
+            invalidate()
+        }
+    }
     // setting up the drawing
     private fun setUpDrawing(){
         mDrawPaint = Paint()
@@ -62,9 +83,7 @@ class DrawingView(context: Context, attrs: AttributeSet) : View(context,attrs){
             canvas.drawPath(mDrawPath!!, mDrawPaint!!)
         }
     }
-    fun eraser(){
-        color = Color.WHITE
-    }
+
 
 //    recognising the movement of touchfinger
     override fun onTouchEvent(event: MotionEvent?): Boolean {
@@ -96,7 +115,7 @@ class DrawingView(context: Context, attrs: AttributeSet) : View(context,attrs){
     }
 
     fun setSizeForBrush(newSize: Float){
-        color = Color.BLACK
+
         mBrushSize = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,
         newSize, resources.displayMetrics)
         mDrawPaint!!.strokeWidth = mBrushSize

@@ -6,25 +6,43 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
-    <com.example.drawit.DrawingView
-        android:id="@+id/drawing_view"
+    <FrameLayout
+        android:id="@+id/fl_drawing_container"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_margin="5dp"
+        android:padding="1dp"
         android:background="@drawable/background_drawing_border"
         app:layout_constraintBottom_toTopOf="@+id/colorPalet"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        >
+        <ImageView
+            android:id="@+id/iv_bg"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="centerCrop"
+            android:src="@drawable/bgimage"
+            />
+
+        <com.example.drawit.DrawingView
+            android:id="@+id/drawing_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="#80FFFFFF"
+            />
+    </FrameLayout>
+
 
     <LinearLayout
         android:id="@+id/colorPalet"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center_horizontal"
+        app:layout_constraintTop_toBottomOf="@id/fl_drawing_container"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/drawing_view"
         app:layout_constraintBottom_toTopOf="@id/tool_bar"
 
 >
@@ -48,14 +66,16 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:onClick="changeColorToSkyBlue"
-            android:src="@drawable/skyblue" />
+            android:src="@drawable/skyblue"
+            tools:ignore="ContentDescription" />
 
         <ImageButton
             android:id="@+id/yellowColor"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:onClick="changeColorToYellow"
-            android:src="@drawable/yellow" />
+            android:src="@drawable/yellow"
+            tools:ignore="ContentDescription" />
     </LinearLayout>
 
     <LinearLayout
@@ -68,21 +88,65 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintBottom_toBottomOf="parent">
 
+
+        <ImageButton
+            android:id="@+id/newfilebtn"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_margin="5dp"
+            android:scaleType="fitXY"
+            android:src="@drawable/new_file_icon"
+            tools:ignore="ContentDescription" />
+        <ImageButton
+            android:id="@+id/gallerybtn"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_margin="5dp"
+            android:scaleType="fitXY"
+            android:src="@drawable/gallerylogo"
+            tools:ignore="ContentDescription" />
+
         <ImageButton
             android:id="@+id/brush"
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:layout_margin="5dp"
             android:scaleType="fitXY"
-            android:src="@drawable/brush" />
+            android:src="@drawable/brush"
+            tools:ignore="ContentDescription" />
 
         <ImageButton
-            android:id="@+id/eraser"
+            android:id="@+id/undo"
             android:layout_width="50dp"
-            android:layout_height="50dp"
+            android:layout_height="match_parent"
             android:layout_margin="5dp"
             android:scaleType="fitXY"
-            android:src="@drawable/eraser" />
+            android:src="@drawable/undo_icon"
+            tools:ignore="ContentDescription" />
+        <ImageButton
+            android:id="@+id/redo"
+            android:layout_width="50dp"
+            android:layout_height="match_parent"
+            android:layout_margin="5dp"
+            android:scaleType="fitXY"
+            android:src="@drawable/redo_icon"
+            tools:ignore="ContentDescription" />
+        <ImageButton
+            android:id="@+id/save"
+            android:layout_width="50dp"
+            android:layout_height="match_parent"
+            android:layout_margin="5dp"
+            android:scaleType="fitXY"
+            android:src="@drawable/save_File"
+            tools:ignore="ContentDescription" />
+        <ImageButton
+            android:id="@+id/share"
+            android:layout_width="50dp"
+            android:layout_height="match_parent"
+            android:layout_margin="5dp"
+            android:scaleType="fitXY"
+            android:src="@drawable/share_Icon"
+            tools:ignore="ContentDescription" />
 
 
     </LinearLayout>
