@@ -4,21 +4,27 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="..\:/DrawIt/app/src/main/res/drawable-v24/green.xml" value="0.1" />
+        <entry key="..\:/DrawIt/app/src/main/res/drawable-v24/ic_launcher_foreground.xml" value="0.2425" />
         <entry key="..\:/DrawIt/app/src/main/res/drawable-v24/red.xml" value="0.2425" />
         <entry key="..\:/DrawIt/app/src/main/res/drawable-v24/skyblue.xml" value="0.1" />
         <entry key="..\:/DrawIt/app/src/main/res/drawable-v24/yellow.xml" value="0.1" />
         <entry key="..\:/DrawIt/app/src/main/res/drawable/background_drawing_border.xml" value="0.1305" />
         <entry key="..\:/DrawIt/app/src/main/res/drawable/extralarge.xml" value="0.1" />
         <entry key="..\:/DrawIt/app/src/main/res/drawable/extrasmall.xml" value="0.1" />
+        <entry key="..\:/DrawIt/app/src/main/res/drawable/ic_launcher_background.xml" value="0.2425" />
         <entry key="..\:/DrawIt/app/src/main/res/drawable/large.xml" value="0.1" />
         <entry key="..\:/DrawIt/app/src/main/res/drawable/medium.xml" value="0.1" />
+        <entry key="..\:/DrawIt/app/src/main/res/drawable/pallet_normal.xml" value="0.13" />
+        <entry key="..\:/DrawIt/app/src/main/res/drawable/pallet_pressed.xml" value="0.1" />
         <entry key="..\:/DrawIt/app/src/main/res/drawable/small.xml" value="0.1" />
         <entry key="..\:/DrawIt/app/src/main/res/layout/activity_color_picker.xml" value="0.1" />
-        <entry key="..\:/DrawIt/app/src/main/res/layout/activity_main.xml" value="0.2" />
+        <entry key="..\:/DrawIt/app/src/main/res/layout/activity_main.xml" value="0.1" />
+        <entry key="..\:/DrawIt/app/src/main/res/layout/activity_startup.xml" value="0.1" />
         <entry key="..\:/DrawIt/app/src/main/res/layout/colorpicker.xml" value="0.1" />
         <entry key="..\:/DrawIt/app/src/main/res/layout/dialog_brush_size.xml" value="0.1" />
         <entry key="..\:/DrawIt/app/src/main/res/layout/dialog_custom_dialog.xml" value="0.23177083333333334" />
         <entry key="..\:/DrawIt/app/src/main/res/layout/dialog_custom_progress.xml" value="0.2359375" />
+        <entry key="..\:/DrawIt/app/src/main/res/menu/menubar.xml" value="0.264" />
         <entry key="..\:/DrawIt/app/src/main/res/xml/paths.xml" value="0.2328125" />
       </map>
     </option>

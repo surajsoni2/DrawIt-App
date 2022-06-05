@@ -18,7 +18,7 @@ class DrawingView(context: Context, attrs: AttributeSet) : View(context,attrs){
     private var mDrawPaint: Paint? = null
     private var mCanvasPaint: Paint?= null
     private var mBrushSize: Float = 0.toFloat()
-    private var color = Color.BLACK
+    private var color = Color.RED
     private var canvas: Canvas? = null
     private var mPaths = ArrayList<CustomPath>()
 
@@ -121,8 +121,9 @@ class DrawingView(context: Context, attrs: AttributeSet) : View(context,attrs){
         mDrawPaint!!.strokeWidth = mBrushSize
     }
 
-    fun changeColor(mycolor: Int) {
-        color = mycolor
+    fun changeColor(mycolor: String) {
+        color = Color.parseColor(mycolor)
+        mDrawPaint!!.color = color
     }
 
 

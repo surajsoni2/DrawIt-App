@@ -3,8 +3,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.example.drawit">
 
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -12,9 +13,11 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.DrawIt">
-
         <activity
             android:name=".MainActivity"
+            android:exported="false" />
+        <activity
+            android:name=".startup"
             android:exported="true"
             android:screenOrientation="portrait">
             <intent-filter>
@@ -25,16 +28,14 @@
         </activity>
 
         <provider
-            android:authorities="com.example.drawit.fileprovider"
             android:name="androidx.core.content.FileProvider"
+            android:authorities="com.example.drawit.fileprovider"
             android:exported="false"
             android:grantUriPermissions="true">
-
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
-                android:resource="@xml/paths"/>
+                android:resource="@xml/paths" />
         </provider>
-
     </application>
 
 </manifest>

@@ -9,19 +9,22 @@ import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.Color
 import android.media.MediaScannerConnection
+import android.net.Uri
 import android.os.Bundle
 import android.os.Environment
 import android.provider.MediaStore
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
 import android.view.View
-import android.widget.FrameLayout
-import android.widget.ImageButton
-import android.widget.ImageView
- import android.widget.Toast
+import android.widget.*
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.core.content.FileProvider
+import androidx.core.view.get
 import androidx.lifecycle.lifecycleScope
 import com.flask.colorpicker.ColorPickerView
 import com.flask.colorpicker.builder.ColorPickerDialogBuilder
@@ -32,14 +35,19 @@ import java.io.ByteArrayOutputStream
 import java.io.File
 import java.io.FileOutputStream
 import java.lang.Exception
+import kotlin.math.round
 
 
 class MainActivity : AppCompatActivity() {
 
+
+//Some Important variables
     private var drawingView: DrawingView? = null
     var customProgressDialog: Dialog? =null
     var isImagesaved: Boolean = false
-    var savedPath: String? = null
+    private var savedPath: File? =null
+    private var mImageBtnCurrentColor: ImageButton? = null
+
     // for gallery part
     val openGalleryLauncher : ActivityResultLauncher<Intent> = registerForActivityResult(ActivityResultContracts.StartActivityForResult()){
         result ->
@@ -72,6 +80,7 @@ class MainActivity : AppCompatActivity() {
                         .show()
                 }
             }
+
         }
     }
 
@@ -79,10 +88,16 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-
-
         drawingView = findViewById(R.id.drawing_view)
         drawingView?.setSizeForBrush(10.toFloat())
+
+        val linearLayoutPaintColors = findViewById<LinearLayout>(R.id.colorPalet)
+
+        mImageBtnCurrentColor = linearLayoutPaintColors[1] as ImageButton
+        mImageBtnCurrentColor!!.setImageDrawable(
+            ContextCompat.getDrawable(this,R.drawable.pallet_pressed)
+        )
+
 
         //Brushsize chabge button code starts here
         val brushBtn: ImageButton = findViewById(R.id.brush)
@@ -104,9 +119,6 @@ class MainActivity : AppCompatActivity() {
 
         //Gallery and image selecting btn start here
         val gallerybtn: ImageButton = findViewById(R.id.gallerybtn)
-
-
-
         gallerybtn.setOnClickListener{
             requestStoragePermission()
         }
@@ -118,7 +130,7 @@ class MainActivity : AppCompatActivity() {
             builder.setTitle("Are you sure?")
                 .setMessage("Please Confirm and Save your previous file, It will delete all the content of the previous file")
                 .setPositiveButton("Ok"){
-                        dialog, which->
+                        dialog, _ ->
                     // Creating a new file
                     drawingView?.newFile()
                     dialog.dismiss()
@@ -132,14 +144,14 @@ class MainActivity : AppCompatActivity() {
             showWarningBeforeNew()
         }
 
-        // Save button Code Starts Here
+//        // Save button Code Starts Here
         val savebtn: ImageButton = findViewById(R.id.save)
         savebtn.setOnClickListener {
             if (isReadStorageAllowed()){
                 showProgressDialog()
                 lifecycleScope.launch{
                     val flDrawingView:FrameLayout = findViewById(R.id.fl_drawing_container)
-//                    val myBitmap: Bitmap = getBitmapFromView(flDrawingView)
+
                     saveBitmapFile(getBitmapFromView(flDrawingView))
                 }
             }
@@ -148,7 +160,7 @@ class MainActivity : AppCompatActivity() {
 
         val sharebtn: ImageButton = findViewById(R.id.share)
         sharebtn.setOnClickListener {
-            shareImage(savedPath!!)
+           shareImage(FileProvider.getUriForFile(baseContext,"com.example.drawit.fileprovider",savedPath!!))
         }
     }
 
@@ -190,18 +202,21 @@ class MainActivity : AppCompatActivity() {
             brushDialog.show()
         }
 
-     fun changeColorToGreen(view:View){
-            drawingView?.changeColor(Color.GREEN)
+    fun colorClicked(view: View){
 
-    }
-     fun changeColorToYellow(view:View){
-            drawingView?.changeColor(Color.YELLOW)
-    }
-     fun changeColorToSkyBlue(view:View){
-         drawingView?.changeColor(Color.parseColor("#87CEEB"))
-     }
-     fun changeColorToRed(view: View) {
-            drawingView?.changeColor(Color.RED)
+        if(view!== mImageBtnCurrentColor){
+            val imageButton = view as ImageButton
+            val colorTag = imageButton.tag.toString()
+            drawingView?.changeColor(colorTag)
+
+            imageButton.setImageDrawable(
+                ContextCompat.getDrawable(this,R.drawable.pallet_pressed)
+            )
+            mImageBtnCurrentColor?.setImageDrawable(
+                ContextCompat.getDrawable(this,R.drawable.pallet_normal)
+            )
+            mImageBtnCurrentColor = view
+        }
     }
 
     private fun getBitmapFromView(view: View): Bitmap{
@@ -226,8 +241,7 @@ class MainActivity : AppCompatActivity() {
                 try{
                     val bytes = ByteArrayOutputStream()
                     mBitmap.compress(Bitmap.CompressFormat.PNG,90,bytes)
-                    val storagePath = getExternalFilesDir(Environment.DIRECTORY_DCIM)
-                    val f = File(storagePath?.absoluteFile.toString()
+                    val f = File(externalCacheDir?.absoluteFile.toString()
                                 + File.separator+"DrawITApp_"+System.currentTimeMillis() / 1000 + ".jpg"
                     )
                     val fo = FileOutputStream(f)
@@ -235,12 +249,14 @@ class MainActivity : AppCompatActivity() {
                     fo.close()
 
                     result = f.absolutePath
-                    savedPath = result
+                    savedPath = f
                     runOnUiThread{
                         cancelProgressDialog()
                         if (result.isNotEmpty()){
                             Toast.makeText(this@MainActivity,"File saved succesfully :$result",Toast.LENGTH_LONG).show()
-                            isImagesaved = true
+//                            isImagesaved = true
+//                            savedPath = result
+//                            shareImage(FileProvider.getUriForFile(baseContext,"com.example.drawit.fileprovider",f))
                         }else{
                             Toast.makeText(this@MainActivity,"Something went wrong while saving th file.",Toast.LENGTH_SHORT).show()
                         }
@@ -272,7 +288,7 @@ class MainActivity : AppCompatActivity() {
                 Manifest.permission.READ_EXTERNAL_STORAGE,
                 Manifest.permission.WRITE_EXTERNAL_STORAGE
             ))
-            //TODO add external storagge permission
+
         }
 
     }
@@ -294,17 +310,16 @@ class MainActivity : AppCompatActivity() {
     }
 
 // Share function
-    private fun shareImage(result: String){
+    private fun shareImage(uri: Uri){
 
-        MediaScannerConnection.scanFile(this, arrayOf(result), null){
-            path, uri->
+
             val shareIntent = Intent()
             shareIntent.action =Intent.ACTION_SEND
             shareIntent.putExtra(Intent.EXTRA_STREAM,uri)
-            shareIntent.type = "image/png"
+            shareIntent.type = "image/jpeg"
             startActivity(Intent.createChooser(shareIntent,"Share"))
         }
-    }
+
 
 }
 
